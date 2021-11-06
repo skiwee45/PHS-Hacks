@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+        <v-container>
     <v-card>
       <v-card-title>
         Generate New Route
@@ -20,7 +20,7 @@
           </v-form>
         </v-card-text>
     </v-card>
-  </v-container>
+        </v-container>
 </template>
 
 <script>
@@ -32,7 +32,8 @@ export default {
       drivingAbilityChoices: ['Beginner', 'Intermediate', 'Proficient'],
       currentAddress: null,
       numberOfStops: null,
-      drivingAbility: null
+      drivingAbility: null,
+      dialog: false
     }
   },
   computed: {
