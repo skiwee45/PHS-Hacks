@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>First Webpage</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./app.js"></script>
+  </head>
+
+  <body>
+    <form action="#" onsubmit="return inputToCoord()" id="loc-form">
+      Location:
+      <br />
+      <input type="text" id="loc" size="20" name="loc" />
+
+      <br />
+      <br />
+      <input type="submit" value="Submit" />
+    </form>
+
+    <div id="map"></div>
+
+    <script
+      async
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdZ8GXm2rC-co5WIseA-9sQRtCZATT84I&libraries=places&callback=initMap"
+    ></script>
+  </body>
+</html>

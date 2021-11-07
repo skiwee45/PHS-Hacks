@@ -38,7 +38,9 @@ export default {
   data: () => ({
     dialog: false,
     currentRoute: null,
-    pastRoutes: []
+    pastRoutes: [],
+    start: '',
+    end: ''
   }),
 
   computed: {
@@ -47,6 +49,14 @@ export default {
     },
     formButtonColor () {
       return this.inRoute ? 'error' : 'success'
+    },
+    origin () {
+      if (!this.start) return null
+      return { query: this.start }
+    },
+    destionation () {
+      if (!this.end) return null
+      return { query: this.end }
     }
   }
 }
