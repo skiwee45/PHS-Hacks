@@ -6,6 +6,8 @@ import sys
 # import tensorflow as tf
 
 
+# comment out model for low end performing devices
+
 """
 input_1 = layers.Input((2, ))
 input_2 = layers.Input((2, ))
