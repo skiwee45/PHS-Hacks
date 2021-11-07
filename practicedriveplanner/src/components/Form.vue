@@ -1,5 +1,4 @@
 <template>
-        <v-container>
     <v-card>
       <v-card-title>
         Generate New Route
@@ -11,16 +10,15 @@
               <v-col cols="8">
                 <v-slider label="Number Of Stops" :rules="rules" prepend-icon="mdi-map-marker" v-model.number="numberOfStops" max="10" min="2" thumb-label></v-slider>
               </v-col>
-              <v-col cols="1"><v-span class="text-body-1">{{numberOfStops}}</v-span></v-col>
+              <v-col cols="1"><span class="text-body-1">{{numberOfStops}}</span></v-col>
               <v-col cols="3">
                 <v-select label="Driving Ability" dense :rules="rules" :items="drivingAbilityChoices" v-model="drivingAbility"></v-select>
               </v-col>
             </v-row>
-            <v-btn flat class="success mx-0 mt-3" :disabled="!canSubmit">Generate Route</v-btn>
+            <v-btn class="success mx-0 mt-3" @click="submitForm()">Generate Route</v-btn>
           </v-form>
         </v-card-text>
     </v-card>
-        </v-container>
 </template>
 
 <script>
@@ -32,8 +30,22 @@ export default {
       drivingAbilityChoices: ['Beginner', 'Intermediate', 'Proficient'],
       currentAddress: null,
       numberOfStops: null,
-      drivingAbility: null,
-      dialog: false
+      drivingAbility: null
+    }
+  },
+  methods: {
+    submitForm () {
+      if (!this.$refs.form.validate()) {
+        return
+      }
+      this.$emit('submit-form', {
+        currentAddress: this.currentAddress,
+        numberOfSteps: this.numberOfStops,
+        drivingAbility: this.drivingAbility
+      })
+      this.currentAddress = null
+      this.numberOfStops = null
+      this.drivingAbility = null
     }
   },
   computed: {
@@ -41,9 +53,6 @@ export default {
       const rules = []
       rules.push(v => !!v || 'Required field')
       return rules
-    },
-    canSubmit () {
-      return this.$refs.form.validate()
     }
   }
 }
