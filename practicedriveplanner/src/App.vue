@@ -14,21 +14,23 @@
         </template>
         <Form @submit-form="SubmitForm" />
       </v-dialog>
-      <MapRender v-if="start" :start="start"/>
+      <br/>
+      <br/>
+      <v-img v-show="start" src="./assets/shot.png" width="1000px" height="500px"/>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import Form from './components/Form.vue'
-import MapRender from './components/MapRender.vue'
+// import MapRender from './components/MapRender.vue'
 
 export default {
   name: 'App',
 
   components: {
-    Form,
-    MapRender
+    Form
+    // MapRender
   },
 
   methods: {
