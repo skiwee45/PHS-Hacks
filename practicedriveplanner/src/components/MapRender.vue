@@ -1,24 +1,26 @@
 <template>
-  <div id="map" ref="map"></div>
+  <div>
+    <div id="map" ref="map"></div>
+  </div>
 </template>
 
 <script>
-import { Loader } from '@googlemaps/js-api-loader'
+// import { Loader } from '@googlemaps/js-api-loader'
 
-const loader = new Loader({
-  apiKey: '',
-  version: 'weekly',
-  libraries: ['places']
-})
+// const loader = new Loader({
+//   apiKey: '',
+//   version: 'weekly',
+//   libraries: ['places']
+// })
 
-loader
-  .load()
-  .then((google) => {
-    this.google = google
-  })
-  .catch(e => {
-    console.log(e)
-  })
+// loader
+//   .load()
+//   .then((google) => {
+//     this.google = google
+//   })
+//   .catch(e => {
+//     console.log(e)
+//   })
 
 export default {
   created: this.initMap(),
@@ -46,20 +48,20 @@ export default {
   },
   methods: {
     initMap () {
-      this.directionsService = new this.google.maps.DirectionsService()
-      this.directionsRenderer = new this.google.maps.DirectionsRenderer()
-      var chicago = new this.google.maps.LatLng(41.850033, -87.6500523)
+      this.directionsService = new window.google.maps.DirectionsService()
+      this.directionsRenderer = new window.google.maps.DirectionsRenderer()
+      var chicago = new window.google.maps.LatLng(41.850033, -87.6500523)
       var mapOptions = {
         zoom: 7,
         center: chicago
       }
-      var map = new this.google.maps.Map(this.$refs.map, mapOptions)
+      var map = new window.google.maps.Map(this.$refs.map, mapOptions)
       this.directionsRenderer.setMap(map)
     },
     inputToCoord (address) {
-      var geocoder = new this.google.maps.Geocoder()
+      var geocoder = new window.google.maps.Geocoder()
       geocoder.geocode({ address: address }, function (results, status) {
-        if (status === this.google.maps.GeocoderStatus.OK) {
+        if (status === window.google.maps.GeocoderStatus.OK) {
           this.latitude = results[0].geometry.location.lat()
           this.longitude = results[0].geometry.location.lng()
 
@@ -70,12 +72,12 @@ export default {
     createMarker (place) {
       if (!place.geometry || !place.geometry.location) return
 
-      const marker = new this.google.maps.Marker({
+      const marker = new window.google.maps.Marker({
         map: this.map,
         position: place.geometry.location
       })
 
-      this.google.maps.event.addListener(marker, 'click', () => {
+      window.google.maps.event.addListener(marker, 'click', () => {
         this.infowindow.setContent(place.name || '')
         this.infowindow.open(this.map)
       })

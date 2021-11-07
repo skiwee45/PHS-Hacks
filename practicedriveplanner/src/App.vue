@@ -14,24 +14,28 @@
         </template>
         <Form @submit-form="SubmitForm" />
       </v-dialog>
+      <MapRender v-if="start" :start="start"/>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import Form from './components/Form.vue'
+import MapRender from './components/MapRender.vue'
 
 export default {
   name: 'App',
 
   components: {
-    Form
+    Form,
+    MapRender
   },
 
   methods: {
     SubmitForm (form) {
       this.dialog = false
       this.inRoute = true
+      this.start = form.currentAddress
     }
   },
 

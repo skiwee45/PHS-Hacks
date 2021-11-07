@@ -23,6 +23,22 @@
 
 <script>
 import '@mdi/font/css/materialdesignicons.css'
+import { Loader } from '@googlemaps/js-api-loader'
+
+const loader = new Loader({
+  apiKey: '',
+  version: 'weekly',
+  libraries: ['places']
+})
+
+loader
+  .load()
+  .then((google) => {
+    this.google = google
+  })
+  .catch(e => {
+    console.log(e)
+  })
 
 export default {
   data () {
@@ -30,7 +46,8 @@ export default {
       drivingAbilityChoices: ['Beginner', 'Intermediate', 'Proficient'],
       currentAddress: null,
       numberOfStops: null,
-      drivingAbility: null
+      drivingAbility: null,
+      google: null
     }
   },
   methods: {

@@ -1,99 +1,122 @@
-let map;
-let service;
-let infowindow;
-//var test = [];
-var latitude = 40.306;
-var longitude = -74.6197;
+let map
+let service
+let infowindow
+var test = []
+var latitude = 40.306
+var longitude = -74.6197
+var directionsService
+var directionsRenderer
 
-//this functions uses geocoder api to convert the address to lat and lng coords
-function inputToCoord() {
-  var geocoder = new google.maps.Geocoder();
-  var address = currentAddress; //currentAddress is variable initialized in Form.vue, which is the current Address of the driver
+function inputToCoord () {
+  var geocoder = new google.maps.Geocoder()
+  var address = document.getElementById('loc').value
   geocoder.geocode({ address: address }, function (results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
-      latitude = results[0].geometry.location.lat();
-      longitude = results[0].geometry.location.lng();
+      latitude = results[0].geometry.location.lat()
+      longitude = results[0].geometry.location.lng()
 
-      initMap();
+      initMap()
     }
-  });
+  })
 }
 
-function initMap() {
-  const location = new google.maps.LatLng(latitude, longitude);
+function initMap () {
+  directionsService = new google.maps.DirectionsService()
+  directionsRenderer = new google.maps.DirectionsRenderer()
+  const location = new google.maps.LatLng(latitude, longitude)
 
-  infowindow = new google.maps.InfoWindow();
-  map = new google.maps.Map(document.getElementById("map"), {
+  infowindow = new google.maps.InfoWindow()
+  map = new google.maps.Map(document.getElementById('map'), {
     center: location,
-    zoom: 25,
-  });
+    zoom: 25
+  })
 
   const request = {
-    query: "neighborhood",
-    fields: ["types"],
-  };
+    query: 'neighborhood',
+    fields: ['types']
+  }
 
-  service = new google.maps.places.PlacesService(map);
+  service = new google.maps.places.PlacesService(map)
   service.textSearch(request, (results, status) => {
     if (status === google.maps.places.PlacesServiceStatus.OK && results) {
       for (let i = 0; i < results.length; i++) {
-        createMarker(results[i]);
-        test.push(results[i]);
+        createMarker(results[i])
+        test.push(results[i])
       }
 
-      //map.setCenter(results[0].geometry.location);
+      // map.setCenter(results[0].geometry.location);
     }
-  });
+  })
+
+  const center = { lat: latitude, lng: longitude }
+  // Create a bounding box with sides ~10km away from the center point
+  const defaultBounds = {
+    north: center.lat + 0.1,
+    south: center.lat - 0.1,
+    east: center.lng + 0.1,
+    west: center.lng - 0.1
+  }
+
+  const input = document.getElementById('loc')
+  const options = {
+    bounds: defaultBounds,
+    componentRestrictions: { country: 'us' },
+    fields: ['address_components', 'geometry', 'icon', 'name'],
+    strictBounds: false,
+    types: ['establishment']
+  }
+  const autocomplete = new google.maps.places.Autocomplete(input, options)
+
+  calcRoute(true, latitude, longitude, 35.9605454, -80.0020807)
+  directionsRenderer.setMap(map)
 }
 
-function createMarker(place) {
-  if (!place.geometry || !place.geometry.location) return;
+function createMarker (place) {
+  if (!place.geometry || !place.geometry.location) return
 
   const marker = new google.maps.Marker({
     map,
-    position: place.geometry.location,
-  });
+    position: place.geometry.location
+  })
 
-  google.maps.event.addListener(marker, "click", () => {
-    infowindow.setContent(place.name || "");
-    infowindow.open(map);
-  });
+  google.maps.event.addListener(marker, 'click', () => {
+    infowindow.setContent(place.name || '')
+    infowindow.open(map)
+  })
 }
 
-// const center = { lat: 40.306, lng: -74.6197 };
-// // Create a bounding box with sides ~10km away from the center point
-// const defaultBounds = {
-//   north: center.lat + 0.1,
-//   south: center.lat - 0.1,
-//   east: center.lng + 0.1,
-//   west: center.lng - 0.1,
-// };
+function getReverseGeocodingData (lat, lng) {
+  var latlng = new google.maps.LatLng(lat, lng)
+  // This is making the Geocode request
+  var geocoder = new google.maps.Geocoder()
+  geocoder.geocode({ latLng: latlng }, function (results, status) {
+    if (status !== google.maps.GeocoderStatus.OK) {
+      alert(status)
+    }
+    // This is checking to see if the Geoeode Status is OK before proceeding
+    if (status == google.maps.GeocoderStatus.OK) {
+      console.log(results)
+      var address = results[0].formatted_address
+    }
+  })
+}
 
-// const input = document.getElementById("pac-input");
-// const options = {
-//   bounds: defaultBounds,
-//   componentRestrictions: { country: "us" },
-//   fields: ["address_components", "geometry", "icon", "name"],
-//   strictBounds: false,
-//   types: ["establishment"],
-// };
-// const autocomplete = new google.maps.places.Autocomplete(input, options);
-
-// var axios = require("axios");
-
-// var config = {
-//   method: "get",
-//   url: "https://maps.googleapis.com/maps/api/distancematrix/json?origins=40.6655101%2C-73.89188969999998&destinations=40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=AIzaSyBdZ8GXm2rC-co5WIseA-9sQRtCZATT84I",
-//   headers: {},
-// };
-
-// axios(config)
-//   .then(function (response) {
-//     console.log(JSON.stringify(response.data));
-//   })
-//   .catch(function (error) {
-//     console.log(error);
-//   });
-
-// AIzaSyBdZ8GXm2rC-co5WIseA-9sQRtCZATT84I
-// Distance Matri Api Key:
+function calcRoute (reverse, sLat, sLong, eLat, eLong) {
+  if (!reverse) {
+    var start = { lat: sLat, lng: sLong }
+    var end = { lat: eLat, lng: eLong }
+  } else {
+    var end = { lat: latitude, lng: longitude }
+    var start = { lat: eLat, lng: eLong }
+  }
+  var request = {
+    origin: start,
+    destination: end,
+    travelMode: 'DRIVING'
+  }
+  directionsService.route(request, function (result, status) {
+    if (status == 'OK') {
+      directionsRenderer.setDirections(result)
+    }
+  })
+}
