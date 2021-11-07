@@ -2,6 +2,7 @@
 node_modules
 /dist
 
+*accidents.csv
 
 # local env files
 .env.local
