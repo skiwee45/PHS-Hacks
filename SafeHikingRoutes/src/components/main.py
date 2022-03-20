@@ -1,9 +1,7 @@
 from utils import *
-
+from siamese import SiameseNetwork
 import sys
-
-
-# import tensorflow as tf
+import tensorflow as tf
 
 
 # comment out model for low end performing devices
@@ -33,15 +31,15 @@ siamese.compile(loss=loss(margin=1), optimizer="RMSprop", metrics=["accuracy"])
 
 
 siamese.fit([np.array(dT[0]),np.array(dT[1])], np.array([1,1]).reshape(-1,1)
-"""
+
 
 def find_best_path(sxCoord: int, syCoord: int, radius: int, level: int):
     paths = getPathCoordinates(sxCoord, syCoord, radius)
 
 
-    crashes = getTotalCrashes(paths)
+    wildfires = gettotalWildfires(paths)
     sinuodal = getSinuodalValue(paths)
-    traffic = getTraffic(paths)
+    traildifficulty = getDiffTrail(paths)
     fixedPaths = []
     for path in paths:
         fixedPaths.append([*map(lambda x: (x['lat'], x['lng']), path)])
@@ -54,7 +52,7 @@ def find_best_path(sxCoord: int, syCoord: int, radius: int, level: int):
 
     for path in range(len(paths)):
         score = 0
-        if crashes[path] != 0:
+        if wildfires[path] != 0:
             score+=(1/crashes[path])
 
         score+=1.5 * (1.008- sinuodal[path])
@@ -88,7 +86,7 @@ output = find_best_path(lat, lng, radius, level)
 print(output['lat'], output['lng'])
         
 
-
+"""
 
 
 

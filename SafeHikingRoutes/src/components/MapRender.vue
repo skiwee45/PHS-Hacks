@@ -112,7 +112,7 @@ export default {
       var request = {
         origin: start,
         destination: end,
-        travelMode: 'DRIVING'
+        travelMode: 'WALKING'
       }
       this.directionsService.route(request, function (result, status) {
         if (status === 'OK') {

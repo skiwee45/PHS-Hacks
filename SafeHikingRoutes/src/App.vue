@@ -16,7 +16,7 @@
       </v-dialog>
       <br/>
       <br/>
-      <v-img v-show="start" src="./assets/shot.png" width="1000px" height="500px"/>
+      <v-img v-show="start" src="./assets/shot.png" width=" 10000px" height="800px" />
     </v-main>
   </v-app>
 </template>
@@ -70,7 +70,7 @@ export default {
 
 <style>
 #app {
-  background: url('https://onicodod.sirv.com/1920x1080-5408292-snow-road-forest-winter-tree-frozen-wood-cold-driving-curve-drone-view-aerial-view-mountain-ice-aerial-drone-car-oregon-mt-hood-national-forest-png-images.jpg') center fixed !important;
+  background: url('https://www.xmple.com/wallpaper/black-green-gradient-linear-1920x1080-c2-000000-228b22-a-105-f-14.svg') center fixed !important;
   background-size: 700px;
 }
 </style>
